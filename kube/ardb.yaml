@@ -1,0 +1,34 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ardb
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ardb
+    spec:
+      containers:
+        - name: ardb
+          image: nandanrao/ardb:latest
+          resources:
+            requests:
+              cpu: 500m
+              memory: "4096Mi"
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 16379
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ardb
+  labels:
+    app: ardb
+spec:
+  type: NodePort
+  ports:
+   - port: 16379
+  selector:
+   app: ardb
